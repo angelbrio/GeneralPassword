@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        h2 {
+            text-align: center;
+        }
+        label, input {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        input[type="password"], input[type="email"], input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Registro de Usuario</h2>
+        <form id="registerForm">
+            <!-- Campo de nombre de usuario -->
+            <label for="username">Nombre de usuario:</label>
+            <input 
+                type="text" 
+                id="username" 
+                name="username" 
+                placeholder="Introduce tu nombre de usuario"
+                required
+                autocomplete="username"
+            >
+
+            <!-- Campo de correo electrónico -->
+            <label for="email">Correo electrónico:</label>
+            <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                placeholder="Introduce tu correo"
+                autocomplete="email"
+                required
+            >
+
+            <!-- Campo de contraseña -->
+            <label for="password">Contraseña:</label>
+            <input 
+                type="password" 
+                id="password" 
+                name="password" 
+                placeholder="Introduce tu contraseña"
+                autocomplete="new-password" <!-- Esto es clave para que se sugiera una contraseña -->
+                minlength="8"
+                required
+            >
+
+            <!-- Botón de registro -->
+            <button type="submit">Registrar</button>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('registerForm');
+        const passwordField = document.getElementById('password');
+
+        // Validación para asegurar que se introduzca una contraseña segura
+        form.addEventListener('submit', function(event) {
+            const password = passwordField.value;
+            if (password.length < 8) {
+                alert('La contraseña debe tener al menos 8 caracteres');
+                event.preventDefault();
+            }
+        });
+
+        // Evento para sugerir autogeneración de contraseña cuando se enfoca el campo de contraseña
+        passwordField.addEventListener('focus', function() {
+            console.log('Campo de contraseña enfocado: el navegador debería ofrecer una contraseña segura.');
+        });
+    </script>
+
+</body>
+</html>
