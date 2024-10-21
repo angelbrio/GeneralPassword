@@ -91,25 +91,5 @@
             <button type="submit">Registrar</button>
         </form>
     </div>
-
-    <script>
-        const form = document.getElementById('registerForm');
-        const passwordField = document.getElementById('password');
-
-        // Validación para asegurar que se introduzca una contraseña segura
-        form.addEventListener('submit', function(event) {
-            const password = passwordField.value;
-            if (password.length < 8) {
-                alert('La contraseña debe tener al menos 8 caracteres');
-                event.preventDefault();
-            }
-        });
-
-        // Evento para sugerir autogeneración de contraseña cuando se enfoca el campo de contraseña
-        passwordField.addEventListener('focus', function() {
-            console.log('Campo de contraseña enfocado: el navegador debería ofrecer una contraseña segura.');
-        });
-    </script>
-
 </body>
 </html>
