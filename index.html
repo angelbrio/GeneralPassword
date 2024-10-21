@@ -16,12 +16,13 @@
         }
         .form-container {
             background-color: white;
-            padding: 30px 20px; /* Ajusta el relleno para un mejor aspecto */
+            padding: 30px 20px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 400px; /* Limita el ancho máximo */
+            max-width: 400px;
             box-sizing: border-box;
+            position: relative;
         }
         h2 {
             text-align: center;
@@ -37,7 +38,31 @@
             margin-bottom: 15px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            box-sizing: border-box; /* Asegura que el relleno no afecte el ancho */
+            box-sizing: border-box;
+        }
+        .password-container {
+            position: relative;
+            width: 100%;
+        }
+        .password-container input {
+            width: 100%;
+            padding-right: 40px;
+        }
+        .toggle-password {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background: none;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         button {
             padding: 10px;
@@ -52,13 +77,18 @@
         button:hover {
             background-color: #45a049;
         }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
 
     <div class="form-container">
         <h2>Registro de Usuario</h2>
-        <form id="registerForm" onsubmit="return validatePasswords()">
+        <form id="registerForm">
             <!-- Campo de nombre de usuario -->
             <label for="username">Nombre de usuario:</label>
             <input 
@@ -69,6 +99,7 @@
                 required
                 autocomplete="username"
             >
+            <div id="usernameError" class="error"></div>
 
             <!-- Campo de correo electrónico -->
             <label for="email">Correo electrónico:</label>
@@ -80,47 +111,104 @@
                 autocomplete="email"
                 required
             >
+            <div id="emailError" class="error"></div>
 
             <!-- Campo de contraseña -->
             <label for="password">Contraseña:</label>
-            <input 
-                type="password" 
-                id="password" 
-                name="password" 
-                placeholder="Introduce tu contraseña"
-                autocomplete="new-password"
-                minlength="8"
-                required
-            >
+            <div class="password-container">
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    placeholder="Introduce tu contraseña"
+                    required
+                >
+            </div>
+            <div id="passwordError" class="error"></div>
 
             <!-- Campo de repetir contraseña -->
             <label for="confirmPassword">Repetir contraseña:</label>
-            <input 
-                type="password" 
-                id="confirmPassword" 
-                name="confirmPassword" 
-                placeholder="Repite tu contraseña"
-                autocomplete="new-password"
-                required
-            >
+            <div class="password-container">
+                <input 
+                    type="password" 
+                    id="confirmPassword" 
+                    name="confirmPassword" 
+                    placeholder="Repite tu contraseña"
+                    required
+                >
+            </div>
+            <div id="confirmError" class="error"></div>
 
-            <!-- Botón de registro -->
-            <button type="submit">Registrar</button>
+            <!-- Botón de mostrar/ocultar unificado en la esquina con candado -->
+            <button type="button" class="toggle-password" onclick="togglePasswords()">
+                🔒
+            </button>
+
+            <!-- Botón de validación -->
+            <button type="button" id="validateButton">Registrarse</button>
         </form>
     </div>
 
     <script>
-        function validatePasswords() {
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
+        // Función para alternar entre mostrar y ocultar ambas contraseñas
+        function togglePasswords() {
+            const passwordField = document.getElementById('password');
+            const confirmPasswordField = document.getElementById('confirmPassword');
+            const fields = [passwordField, confirmPasswordField];
+            
+            // Cambiar el tipo de ambos campos
+            fields.forEach(field => {
+                const fieldType = field.getAttribute('type') === 'password' ? 'text' : 'password';
+                field.setAttribute('type', fieldType);
+            });
 
-            if (password !== confirmPassword) {
-                alert('Las contraseñas no coinciden');
-                return false;
+            // Cambiar el ícono del botón
+            const button = document.querySelector('.toggle-password');
+            button.textContent = passwordField.getAttribute('type') === 'password' ? '🔒' : '🔓';
+        }
+
+        // Evento al hacer clic en el botón "Validar Contraseña"
+        document.getElementById('validateButton').addEventListener('click', function() {
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const passwordError = document.getElementById('passwordError');
+            const usernameError = document.getElementById('usernameError');
+            const emailError = document.getElementById('emailError');
+
+            // Limpiar mensajes de error previos
+            usernameError.textContent = '';
+            emailError.textContent = '';
+            passwordError.textContent = '';
+
+            // Validar si el nombre está vacío
+            if (username === '') {
+                usernameError.textContent = 'Falta introducir el nombre de usuario';
+                return; // Detener la validación si falta el nombre
             }
 
-            return true;
-        }
+            // Validar si el correo está vacío
+            if (email === '') {
+                emailError.textContent = 'Falta introducir el correo';
+                return; // Detener la validación si falta el correo
+            }
+
+            // Validar si la contraseña está vacía
+            if (password === '') {
+                passwordError.textContent = 'Falta introducir la contraseña';
+                return; // Detener la validación si falta la contraseña
+            }
+
+            // Validar la contraseña con la expresión regular si no está vacía
+            const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+            if (!passwordPattern.test(password)) {
+                passwordError.textContent = 'La contraseña debe tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, un número y un carácter especial.';
+            } else {
+                alert('Contraseña válida');
+            }
+        });
     </script>
 </body>
 </html>
+
