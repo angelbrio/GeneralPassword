@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +15,7 @@
             margin: 0;
             background-color: #f0f0f0;
         }
+
         .form-container {
             background-color: white;
             padding: 30px 20px;
@@ -24,15 +26,20 @@
             box-sizing: border-box;
             position: relative;
         }
+
         h2 {
             text-align: center;
             margin-bottom: 20px;
         }
+
         label {
             display: block;
             margin-bottom: 5px;
         }
-        input[type="password"], input[type="email"], input[type="text"] {
+
+        input[type="password"],
+        input[type="email"],
+        input[type="text"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
@@ -40,14 +47,17 @@
             border-radius: 5px;
             box-sizing: border-box;
         }
+
         .password-container {
             position: relative;
             width: 100%;
         }
+
         .password-container input {
             width: 100%;
             padding-right: 40px;
         }
+
         .toggle-password {
             position: absolute;
             top: 10px;
@@ -64,6 +74,7 @@
             justify-content: center;
             align-items: center;
         }
+
         button {
             padding: 10px;
             background-color: #4CAF50;
@@ -74,9 +85,11 @@
             width: 100%;
             font-size: 16px;
         }
+
         button:hover {
             background-color: #45a049;
         }
+
         .error {
             color: red;
             font-size: 14px;
@@ -84,131 +97,73 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="form-container">
         <h2>Registro de Usuario</h2>
         <form id="registerForm">
-            <!-- Campo de nombre de usuario -->
             <label for="username">Nombre de usuario:</label>
-            <input 
-                type="text" 
-                id="username" 
-                name="username" 
-                placeholder="Introduce tu nombre de usuario"
-                required
-                autocomplete="username"
-            >
+            <input type="text" id="username" name="username" placeholder="Introduce tu nombre de usuario" required
+                autocomplete="username">
             <div id="usernameError" class="error"></div>
 
-            <!-- Campo de correo electrónico -->
             <label for="email">Correo electrónico:</label>
-            <input 
-                type="email" 
-                id="email" 
-                name="email" 
-                placeholder="Introduce tu correo"
-                autocomplete="email"
-                required
-            >
+            <input type="email" id="email" name="email" placeholder="Introduce tu correo" autocomplete="email" required>
             <div id="emailError" class="error"></div>
 
-            <!-- Campo de contraseña -->
             <label for="password">Contraseña:</label>
             <div class="password-container">
-                <input 
-                    type="password" 
-                    id="password" 
-                    name="password" 
-                    placeholder="Introduce tu contraseña"
-                    required
+                <input type="password" id="password" name="password" placeholder="Introduce tu contraseña" required
+                minlength="8"
+                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$"
+                title="La contraseña debe tener al menos 8 caracteres, incluyendo una minúscula, una mayúscula, un número y un carácter especial."
+                autocomplete="new-password"
                 >
             </div>
             <div id="passwordError" class="error"></div>
 
-            <!-- Campo de repetir contraseña -->
-            <label for="confirmPassword">Repetir contraseña:</label>
-            <div class="password-container">
-                <input 
-                    type="password" 
-                    id="confirmPassword" 
-                    name="confirmPassword" 
-                    placeholder="Repite tu contraseña"
-                    required
-                >
-            </div>
-            <div id="confirmError" class="error"></div>
-
-            <!-- Botón de mostrar/ocultar unificado en la esquina con candado -->
             <button type="button" class="toggle-password" onclick="togglePasswords()">
                 🔒
             </button>
 
-            <!-- Botón de validación -->
-            <button type="button" id="validateButton">Registrarse</button>
+            <button type="submit">Registrarse</button>
         </form>
     </div>
 
     <script>
-        // Función para alternar entre mostrar y ocultar ambas contraseñas
+        // Función para alternar entre mostrar y ocultar la contraseña
         function togglePasswords() {
             const passwordField = document.getElementById('password');
-            const confirmPasswordField = document.getElementById('confirmPassword');
-            const fields = [passwordField, confirmPasswordField];
-            
-            // Cambiar el tipo de ambos campos
-            fields.forEach(field => {
-                const fieldType = field.getAttribute('type') === 'password' ? 'text' : 'password';
-                field.setAttribute('type', fieldType);
-            });
-
+            const fieldType = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', fieldType);
             // Cambiar el ícono del botón
             const button = document.querySelector('.toggle-password');
             button.textContent = passwordField.getAttribute('type') === 'password' ? '🔒' : '🔓';
         }
 
-        // Evento al hacer clic en el botón "Validar Contraseña"
-        document.getElementById('validateButton').addEventListener('click', function() {
-            const username = document.getElementById('username').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const passwordError = document.getElementById('passwordError');
+        const form = document.getElementById('registerForm');
+        form.addEventListener('submit', function(event) {
             const usernameError = document.getElementById('usernameError');
             const emailError = document.getElementById('emailError');
+            const passwordError = document.getElementById('passwordError');
 
-            // Limpiar mensajes de error previos
             usernameError.textContent = '';
             emailError.textContent = '';
             passwordError.textContent = '';
 
-            // Validar si el nombre está vacío
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
             if (username === '') {
                 usernameError.textContent = 'Falta introducir el nombre de usuario';
-                return; // Detener la validación si falta el nombre
+                event.preventDefault();
             }
-
-            // Validar si el correo está vacío
             if (email === '') {
                 emailError.textContent = 'Falta introducir el correo';
-                return; // Detener la validación si falta el correo
-            }
-
-            // Validar si la contraseña está vacía
-            if (password === '') {
-                passwordError.textContent = 'Falta introducir la contraseña';
-                return; // Detener la validación si falta la contraseña
-            }
-
-            // Validar la contraseña con la expresión regular si no está vacía
-            const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-
-            if (!passwordPattern.test(password)) {
-                passwordError.textContent = 'La contraseña debe tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, un número y un carácter especial.';
-            } else {
-                alert('Contraseña válida');
+                event.preventDefault();
             }
         });
     </script>
 </body>
-</html>
 
+</html>
