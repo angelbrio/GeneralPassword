@@ -4,7 +4,7 @@
 > **Author**: Ángel Briones Muñoz  
 > **Degree**: Grado en Ingeniería Informática  
 > **Institution**: Universidad Politécnica de Madrid (UPM)  
-> **Supervisor**: [Nombre del Tutor]  
+> **Supervisor**: Dr. Jorge Blasco Alís  
 > **Date**: Julio 2025  
 
 ---
@@ -89,8 +89,7 @@ This project proposes an **educational and technical response** that not only en
 /project-root
 ├── register.html # Secure registration form
 ├── login.html # Optional login interface
-├── style.css # Modern styling and layout
-└── script.js # Password validation + generation logic
+
 
 
 ---
