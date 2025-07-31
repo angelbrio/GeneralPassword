@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Registro de Usuario</title>
+  <title>Registro de Usuario Seguro</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
       display: flex;
@@ -13,17 +16,16 @@
       align-items: center;
       height: 100vh;
       margin: 0;
-      background-color: #f0f0f0;
+      background-color: #f4f4f4;
     }
 
-    main.form-container {
-      background-color: white;
-      padding: 30px 20px;
-      border-radius: 10px;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    main {
+      background-color: #fff;
+      padding: 30px 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
       width: 100%;
       max-width: 400px;
-      box-sizing: border-box;
     }
 
     h2 {
@@ -33,175 +35,196 @@
 
     label {
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
       font-weight: bold;
     }
 
-    input[type="password"],
+    input[type="text"],
     input[type="email"],
-    input[type="text"] {
+    input[type="password"] {
       width: 100%;
       padding: 10px;
-      margin-bottom: 15px;
+      margin-bottom: 14px;
       border: 1px solid #ccc;
-      border-radius: 5px;
-      box-sizing: border-box;
-      transition: all 0.2s ease-in-out;
+      border-radius: 6px;
+      transition: border 0.3s ease;
     }
 
     input:focus {
-      border-color: #4CAF50;
-      box-shadow: 0 0 3px rgba(76, 175, 80, 0.5);
+      border-color: #4caf50;
       outline: none;
+      box-shadow: 0 0 3px rgba(76, 175, 80, 0.3);
     }
 
     .password-container {
       position: relative;
-      width: 100%;
     }
 
-    .password-container input {
-      padding-right: 40px;
-    }
-
-    .toggle-password {
+    .password-container button {
       position: absolute;
-      top: 9px;
-      right: 10px;
-      width: 30px;
-      height: 30px;
+      top: 7px;
+      right: 7px;
       background: none;
       border: none;
-      cursor: pointer;
       font-size: 18px;
+      cursor: pointer;
     }
 
-    button[type="submit"] {
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .actions button {
+      flex: 1;
       padding: 10px;
-      background-color: #4CAF50;
-      color: white;
+      font-size: 14px;
       border: none;
-      border-radius: 5px;
+      border-radius: 6px;
       cursor: pointer;
-      width: 100%;
-      font-size: 16px;
       transition: background-color 0.3s ease;
     }
 
-    button[type="submit"]:hover {
+    .generate-btn {
+      background-color: #2196f3;
+      color: white;
+    }
+
+    .generate-btn:hover {
+      background-color: #1976d2;
+    }
+
+    .submit-btn {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .submit-btn:hover {
       background-color: #45a049;
     }
 
     .error {
       color: red;
-      font-size: 14px;
+      font-size: 13px;
       margin-bottom: 10px;
+    }
+
+    @media (max-width: 500px) {
+      .actions {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
 
 <body>
-  <!-- Using <main> improves semantic structure -->
-  <main class="form-container" role="main">
+  <main role="main">
     <h2>Registro de Usuario</h2>
     <form id="registerForm" novalidate autocomplete="off">
       <!-- Username -->
-      <label for="username">Nombre de usuario:</label>
+      <label for="username">Nombre de usuario</label>
       <input
         type="text"
         id="username"
         name="username"
-        placeholder="Introduce tu nombre de usuario"
         required
+        placeholder="Introduce tu nombre de usuario"
         autocomplete="username"
       />
       <div id="usernameError" class="error"></div>
 
       <!-- Email -->
-      <label for="email">Correo electrónico:</label>
+      <label for="email">Correo electrónico</label>
       <input
         type="email"
         id="email"
         name="email"
-        placeholder="Introduce tu correo"
         required
+        placeholder="Introduce tu correo"
         autocomplete="email"
       />
       <div id="emailError" class="error"></div>
 
       <!-- Password -->
-      <label for="password">Contraseña:</label>
+      <label for="password">Contraseña</label>
       <div class="password-container">
         <input
           type="password"
           id="password"
           name="password"
-          placeholder="Introduce tu contraseña"
           required
+          placeholder="Introduce una contraseña segura"
           minlength="8"
           pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$"
-          title="La contraseña debe tener al menos 8 caracteres, incluyendo una minúscula, una mayúscula, un número y un carácter especial."
+          title="Debe tener mínimo 8 caracteres, incluyendo mayúsculas, minúsculas, un número y un carácter especial."
           autocomplete="new-password"
+          aria-label="Contraseña segura"
         />
-        <!-- Toggle visibility icon -->
-        <button type="button" class="toggle-password" aria-label="Mostrar u ocultar contraseña" onclick="togglePasswordVisibility()">🔒</button>
+        <!-- Toggle visibility -->
+        <button type="button" aria-label="Mostrar u ocultar contraseña" onclick="togglePassword()">👁️</button>
       </div>
       <div id="passwordError" class="error"></div>
 
-      <!-- Submit -->
-      <button type="submit">Registrarse</button>
+      <!-- Action Buttons -->
+      <div class="actions">
+        <button type="button" class="generate-btn" onclick="generatePassword()">Generar Contraseña</button>
+        <button type="submit" class="submit-btn">Registrarse</button>
+      </div>
     </form>
   </main>
 
   <script>
     // Toggle password visibility
-    function togglePasswordVisibility() {
-      const passwordField = document.getElementById('password');
-      const toggleBtn = document.querySelector('.toggle-password');
-      const isHidden = passwordField.type === 'password';
-      passwordField.type = isHidden ? 'text' : 'password';
-      toggleBtn.textContent = isHidden ? '🔓' : '🔒';
+    function togglePassword() {
+      const field = document.getElementById("password");
+      field.type = field.type === "password" ? "text" : "password";
     }
 
-    // Validate form fields on submit
-    document.getElementById('registerForm').addEventListener('submit', function (e) {
-      const username = document.getElementById('username');
-      const email = document.getElementById('email');
-      const password = document.getElementById('password');
+    // Generate a strong password
+    function generatePassword() {
+      const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?";
+      let password = "";
+      for (let i = 0; i < 12; i++) {
+        password += charset[Math.floor(Math.random() * charset.length)];
+      }
+      document.getElementById("password").value = password;
+    }
 
-      const usernameError = document.getElementById('usernameError');
-      const emailError = document.getElementById('emailError');
-      const passwordError = document.getElementById('passwordError');
+    // Validate form fields
+    document.getElementById("registerForm").addEventListener("submit", function (e) {
+      const username = document.getElementById("username");
+      const email = document.getElementById("email");
+      const password = document.getElementById("password");
 
-      // Clear previous errors
-      usernameError.textContent = '';
-      emailError.textContent = '';
-      passwordError.textContent = '';
+      const usernameError = document.getElementById("usernameError");
+      const emailError = document.getElementById("emailError");
+      const passwordError = document.getElementById("passwordError");
+
+      usernameError.textContent = "";
+      emailError.textContent = "";
+      passwordError.textContent = "";
 
       let valid = true;
 
-      // Basic validation
       if (!username.value.trim()) {
-        usernameError.textContent = 'Falta introducir el nombre de usuario';
+        usernameError.textContent = "Por favor, introduce un nombre de usuario.";
         valid = false;
       }
 
       if (!email.value.trim()) {
-        emailError.textContent = 'Falta introducir el correo';
+        emailError.textContent = "Por favor, introduce un correo válido.";
         valid = false;
       }
 
       if (!password.checkValidity()) {
-        passwordError.textContent = 'La contraseña no cumple los requisitos de seguridad.';
+        passwordError.textContent = "La contraseña no cumple los requisitos mínimos de seguridad.";
         valid = false;
       }
 
-      // Prevent form submission if invalid
-      if (!valid) {
-        e.preventDefault();
-      }
+      if (!valid) e.preventDefault();
     });
   </script>
 </body>
-
 </html>
